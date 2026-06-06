@@ -195,21 +195,22 @@ public class Tas {
         }
 
     }
-
+    
     @Override
     public String toString() {
-        String resultat = "[";
-        int size = this.sommets.size();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
         
+        int size = this.sommets.size();
         for (int i = 0; i < size; i++) {
-            resultat += this.sommets.get(i) + ":" + this.valeurs.get(i);
+            sb.append(this.sommets.get(i)).append(":").append(this.valeurs.get(i));
             
             if (i < size - 1) {
-                resultat += ",";
+                sb.append(",");
             }
         }
         
-        resultat += "]";
-        return resultat;
+        sb.append("]");
+        return sb.toString();
     }
 }
