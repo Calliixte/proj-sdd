@@ -1,3 +1,4 @@
+# n'étant pas demandé, ni le sujet de l'évaluation mais simplement un outil simplifiant le développement, ce fichier a été généré par IA.
 # ── Configuration ────────────────────────────────────────────────────────────
 JC        = javac
 JVM       = java
