@@ -22,6 +22,11 @@ public class Tas {
         return this.valeurs;
     }
 
+    public boolean estVide(){
+        //OU au lieu de ET en cas de desynchro des deux arraylist
+        return this.sommets.isEmpty() || this.valeurs.isEmpty();
+    }
+
     //indice fils gauche
     private int fd(int i){
             return 2*i+2;        
