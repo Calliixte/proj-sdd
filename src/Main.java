@@ -27,6 +27,6 @@ public class Main{
         g.ajouterArc("A", "B", 4);
         g.ajouterArc("C", "D", 9);
         g.ajouterArc("B", "C", 3);
-        System.out.println(g);
+        Algorithms.Dijkstra(g, "A", "C"); //teste juste l'execution, écriture de tests plus poussés plus tard
     }
 }
