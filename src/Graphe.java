@@ -20,6 +20,45 @@ public class Graphe {
 		this.nom = nom;
 	}
 
+	/**
+	 * 
+	 * Crée une arraylist a partir des clefs d'une hashmap
+	 * @param map
+	 * @return l'arraylist crée
+	 */
+	private ArrayList<String> keysToList(Map<String, ?> map) {
+		return new ArrayList<>(map.keySet());
+	}
+	/**
+	 * 
+	 * Renvoie les sommets du graphe
+	 * @return l'arraylist des sommets du graphe
+	 */
+	public ArrayList<String> getSommets() {
+		return keysToList(this.graphe);
+	}
+
+	/**
+	 * Renvoie les sommets voisins d'un sommet identifié par son nom
+	 * @param sommet sommet dont on veut les voisins
+	 * @return l'arraylist des voisins du sommet
+	 */
+	public ArrayList<String> getVoisins(String sommet) {
+		return keysToList(this.graphe.get(sommet));
+	}
+
+	/**
+	 * Renvoie la distance entre le sommet 1 et le sommet 2, null si la distance n'existe pas
+	 * @param s1 sommet 1 
+	 * @param s2 sommet 2
+	 * @return la distance entre les deux sommets
+	 */
+	public Integer getDistance(String s1, String s2) {
+		if (graphe.containsKey(s1) && graphe.get(s1).containsKey(s2)) {
+			return graphe.get(s1).get(s2);
+		}
+		return null;
+	}
 	public void ajouterSommet(String x) {
 		// On insère une entrée x dans le dictionnaire,
 		// et on associe à cette entrée un dictionnaire 
