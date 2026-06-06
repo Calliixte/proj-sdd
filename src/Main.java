@@ -20,5 +20,13 @@ public class Main{
         t2.ajouter("17", 17);
         t2.ajouter("41", 41);
         System.out.println(t2);
+
+        Graphe g = new Graphe("Mon graphe");
+
+        g.ajouterSommet("A");
+        g.ajouterArc("A", "B", 4);
+        g.ajouterArc("C", "D", 9);
+        g.ajouterArc("B", "C", 3);
+        System.out.println(g);
     }
 }
