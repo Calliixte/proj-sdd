@@ -1,17 +1,23 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+
 public class Tas {
     /**
      * Implémentation du tas avec une liste pour assurer la complétude du tas, chose non possible avec les pointeurs
      * 
      * Listes parallèles au lieu d'une classe Noeud qui ferait la paire par volonté de simplification, pourrait causer probleme
+     * 
+     * La hashmap associe a chaque string son index dans le tableau pour pouvoir modifier en O(log n) les valeurs
      */
     public ArrayList<String> sommets;
     public ArrayList<Integer> valeurs;
+    private HashMap<String, Integer> indexMap;
 
     public Tas(){
         this.sommets = new ArrayList<String>();
         this.valeurs = new ArrayList<Integer>();
+        this.indexMap = new HashMap<String, Integer>();
     }
 
     public ArrayList<String> getSommets(){
@@ -48,7 +54,10 @@ public class Tas {
         int tmpV = valeurs.get(i); 
         valeurs.set(i,valeurs.get(j)); 
         valeurs.set(j,tmpV);
-        
+
+        // mise a jour de la hashmap apres l'echange
+        indexMap.put(sommets.get(i), i);
+        indexMap.put(sommets.get(j), j);
     }
 
     /**
@@ -61,6 +70,7 @@ public class Tas {
         int indiceInsertion = this.valeurs.size();
         this.valeurs.add(v);
         this.sommets.add(s);
+        indexMap.put(s, indiceInsertion);
 
         int indicePere = pere(indiceInsertion);
         int valPere = this.valeurs.get(indicePere);
@@ -113,6 +123,11 @@ public class Tas {
         //pour éviter de décaler la liste et impacter l'ordre des sommets de l'arbre, on va remplacer le premier sommet par le dernier et supprimer le dernier au lieu de supprimer le premier
         this.valeurs.set(0, this.valeurs.get(dernierIndice));
         this.sommets.set(0, this.sommets.get(dernierIndice));
+
+        // le sommet qui vient d'etre deplace en position 0 doit etre mis a jour dans la map,
+        // et le sommet retire doit en etre supprime
+        indexMap.put(this.sommets.get(0), 0);
+        indexMap.remove(tmpS);
         
         //suppression du dernier élément, maintenant en doublon
         this.valeurs.remove(dernierIndice);
@@ -153,9 +168,8 @@ public class Tas {
      * @param nouvelleValeur
      */
     public void modifierPriorite(String sommet,int nouvelleValeur){
-        //TODO : si problemes de performances sur la recherche linéaire, passer à une hashmap
-        int indice = this.sommets.indexOf(sommet);
-        if (indice == -1) return;
+        Integer indice = indexMap.get(sommet);
+        if (indice == null) return;
 
         int ancienneValeur = this.valeurs.get(indice);
         this.valeurs.set(indice, nouvelleValeur);
