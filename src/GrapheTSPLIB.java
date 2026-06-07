@@ -20,10 +20,23 @@ public class GrapheTSPLIB extends Graphe{
         super.ajouterSommet(s);
     }
 
-    public double getX(String s){
+    /**
+     * getter de x
+     * @param s sommet dont on veut x
+     * @return x, si erreur -> double.max value
+     */
+    public double getX(String s) {
+        if (!this.coordonnees.containsKey(s)) return Double.MAX_VALUE;
         return this.coordonnees.get(s).getX();
     }
-    public double getY(String s){
+
+    /**
+     * getter de y
+     * @param s sommet dont on veut y
+     * @return y, si erreur -> double.max value
+     */
+    public double getY(String s) {
+        if (!this.coordonnees.containsKey(s)) return Double.MAX_VALUE;
         return this.coordonnees.get(s).getY();
     }
 
@@ -31,10 +44,12 @@ public class GrapheTSPLIB extends Graphe{
      * Renvoie la distance euclienne entre deux sommets, utilisée pour A*  
      * @param s1 sommet 1
      * @param s2 sommet 2
-     * @return distance (double)
+     * @return Si execution normale : distance (double) Si erreur : maxvalue du double 
      */
-    public double getDistanceSommets(String s1,String s2){
-        return this.coordonnees.get(s1).distanceEuclidienne(this.coordonnees.get(s2));
+    public double getDistanceSommets(String s1, String s2) {
+    if (!this.coordonnees.containsKey(s1) || !this.coordonnees.containsKey(s2)) 
+        return Double.MAX_VALUE;
+    return this.coordonnees.get(s1).distanceEuclidienne(this.coordonnees.get(s2));
     }
 
 
