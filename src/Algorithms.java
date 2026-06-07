@@ -154,24 +154,18 @@ public class Algorithms {
         for (String sommet : sommets_graphe) {
             //on utilise maxvalue pour representer l'infini et null pour un -1 car ici on fonctionnera toujours en string
             pi.put(sommet,Integer.MAX_VALUE);
-            T.put(sommet,null); 
-            
-            //le tas utilise des entiers ici le resultat sera un double, on supposera que en cas d'arrondi égal le calcul n'aurait pas été impacté
-            //on peut envisager une implantation de tas paramétrable pour le type de donnée passé
-            int h_value;
-            try{
-                h_value = (int) Math.floor(h(g,sommet,arrivee));
-            }catch(Exception e){
-                throw new Exception("Erreur depuis l'algorithme A* :" + e.getMessage());
-            }
-            f.ajouter(sommet, h_value);
+            T.put(sommet,null);            
         }
-
-        pi.replace(depart, 0);
-
+        
+        //le tas utilise des entiers ici le resultat sera un double, on supposera que en cas d'arrondi égal le calcul n'aurait pas été impacté
+        //on peut envisager une implantation de tas paramétrable pour le type de donnée passé
+        pi.put(depart, 0);
+        int h_depart = (int) Math.floor(h(g, depart, arrivee));
+        f.ajouter(depart, h_depart);
+        
         String s = depart; //sommet
 
-        while (s!=arrivee){
+        while (!s.equals(arrivee)){
 
             sommets_traites.add(s);
             //si le sommet est marqué on va au suivant
@@ -205,7 +199,14 @@ public class Algorithms {
                     }catch(Exception e){
                         throw new Exception("Erreur depuis l'algorithme A* :" + e.getMessage());
                     }
-                    f.modifierPriorite(voisin_actuel, nouvelle_distance+h_value); //f(u) = pi(u) + h(u)
+                    if(f.sommetExists(voisin_actuel))
+                    {
+                        f.modifierPriorite(voisin_actuel, nouvelle_distance+h_value); //f(u) = pi(u) + h(u)
+                    }
+                    else
+                    {
+                        f.ajouter(voisin_actuel, nouvelle_distance+h_value); //f(u) = pi(u) + h(u)
+                    }
                 }            
         }   
             if(f.estVide()) break; //plus de nouveau sommet a explorer, on sort de l'algorithme
