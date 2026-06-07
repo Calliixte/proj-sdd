@@ -6,6 +6,9 @@ public class GrapheTSPLIB extends Graphe{
      */
     private Map<String,Point2D> coordonnees;
 
+    /**
+     * Crée un grapheTSPLIB vide
+     */
     public GrapheTSPLIB(){
         super();
         coordonnees = new HashMap<>();
@@ -24,6 +27,12 @@ public class GrapheTSPLIB extends Graphe{
         return this.coordonnees.get(s).getY();
     }
 
+    /**
+     * Renvoie la distance euclienne entre deux sommets, utilisée pour A*  
+     * @param s1 sommet 1
+     * @param s2 sommet 2
+     * @return distance (double)
+     */
     public double getDistanceSommets(String s1,String s2){
         return this.coordonnees.get(s1).distanceEuclidienne(this.coordonnees.get(s2));
     }
