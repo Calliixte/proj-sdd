@@ -20,6 +20,10 @@ public class Tas {
         this.indexMap = new HashMap<String, Integer>();
     }
 
+    public Boolean sommetExists(String s){
+        return indexMap.containsKey(s); //containskey sur indexmap car O(1) alors que contains sur ArrayList O(n)
+    }
+
     public ArrayList<String> getSommets(){
         return this.sommets;
     }
