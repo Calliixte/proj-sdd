@@ -97,4 +97,10 @@ public class Algorithms {
         return_value.put("T",T);
         return return_value;
     }
+
+    public static HashMap<String,HashMap<?,?>> AEtoile(Graphe g,String depart,String arrivee){
+        return null;
+    }
+
+    
 }
