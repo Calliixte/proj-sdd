@@ -102,7 +102,7 @@ public class Tas {
             //on recupere la valeur du nouveau pere
             valPere = this.valeurs.get(indicePere);
 
-            System.out.println("val a ajouter : " + v + " pere : "+valPere);
+            // System.out.println("val a ajouter : " + v + " pere : "+valPere);
         }
      }
 
