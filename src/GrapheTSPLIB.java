@@ -21,7 +21,7 @@ public class GrapheTSPLIB extends Graphe{
      * @param Instance instance des sommets à utiliser pour le graphe
      * @param p seuil donné de construction des arêtes. Si la distance entre 2 points est inférieure à p% de la plus grande distance entre 2 points du graphe, l'arete existe
      */
-    public static GrapheTSPLIB to_GrapheTSPLIB(String Instance, int p){
+    public static GrapheTSPLIB lireFichier(String Instance, int p){
         
         
         /**
