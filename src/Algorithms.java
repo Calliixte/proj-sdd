@@ -290,6 +290,10 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
     // meilleure distance connue entre depart et arrivee
     int meilleure_distance = Integer.MAX_VALUE;
 
+    // sommet sur lequel les deux fronts se sont rejoints pour obtenir meilleure_distance
+    // on en a besoin pour reconstruire le chemin complet lors de la fusion de Tav et Tar
+    String sommet_jonction = null;
+
     while (!Sav.estVide() && !Sar.estVide()) {
 
         // --- recherche avant ---
@@ -336,6 +340,7 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
                         if (distance_totale < meilleure_distance) {
                             meilleure_distance = distance_totale;
                             piav.put(arrivee, meilleure_distance);
+                            sommet_jonction = voisin;
                         }
                     }
                 }
@@ -386,6 +391,7 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
                     if (distance_totale < meilleure_distance) {
                         meilleure_distance = distance_totale;
                         piav.put(arrivee, meilleure_distance);
+                        sommet_jonction = voisin;
                     }
                 }
             }
@@ -393,14 +399,19 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
     }
 
     // reconstruction du vecteur T complet en fusionnant Tav et Tar
-    // Tar donne les prédécesseurs depuis l'arrivée, on les inverse pour les relier à Tav
+    // Tav nous donne directement le chemin départ -> sommet_jonction
+    // Tar donne les prédécesseurs depuis l'arrivée, donc Tar[x] = y signifie y -> x dans le sens arrière,
+    // soit x -> y dans le sens avant : on repart de sommet_jonction et on remonte Tar jusqu'à arrivée
+    // en inversant chaque lien pour les intégrer correctement dans T
     HashMap<String, String> T = new HashMap<>(Tav);
-    for (String sommet : sommets_graphe) {
-        String pred_ar = Tar.get(sommet);
-        if (pred_ar != null && T.get(pred_ar) == null) {
-            // le prédécesseur dans la recherche arrière de sommet est pred_ar
-            // ce qui signifie que pred_ar -> sommet dans le sens arrière, soit sommet -> pred_ar dans le sens avant
-            T.put(pred_ar, sommet);
+
+    if (sommet_jonction != null) {
+        String courant = sommet_jonction;
+        while (courant != null && !courant.equals(arrivee)) {
+            String suivant = Tar.get(courant);
+            if (suivant == null) break;
+            T.put(suivant, courant);
+            courant = suivant;
         }
     }
 
@@ -409,4 +420,5 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
     return_value.put("T", T);
     return return_value;
 }
+
 }
