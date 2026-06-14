@@ -1,4 +1,4 @@
-package Entity;
+package Entities;
 public class TasPointeur {
     /**
      * Implémentation initiale de la classe tas, basé sur ce qui a été réalisé en cours sur les opérations

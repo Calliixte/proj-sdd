@@ -1,4 +1,4 @@
-package Entity;
+package Entities;
 public class Point2D {
     /**
      * Classe representant un point pour la gestion de coordonnées des graphes TSPLIB

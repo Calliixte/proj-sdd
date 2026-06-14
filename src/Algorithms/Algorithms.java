@@ -1,9 +1,9 @@
 package Algorithms;
 import java.util.*;
 
-import Entity.Graphe;
-import Entity.GrapheTSPLIB;
-import Entity.Tas;
+import Entities.Graphe;
+import Entities.GrapheTSPLIB;
+import Entities.Tas;
 
 public class Algorithms {
     /**

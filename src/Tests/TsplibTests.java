@@ -2,7 +2,7 @@ package Tests;
 import java.util.*;
 
 import Algorithms.Algorithms;
-import Entity.GrapheTSPLIB;
+import Entities.GrapheTSPLIB;
 
 /**
  * Tests demandés dans le sujet, sur les instances de la TSPLIB att48 (pour p = 15% et p = 12%) et a280 (p = 6%).

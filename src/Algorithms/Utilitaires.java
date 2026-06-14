@@ -1,6 +1,6 @@
 package Algorithms;
 
-import Entity.GrapheTSPLIB;
+import Entities.GrapheTSPLIB;
 
 public class Utilitaires {
     /**
