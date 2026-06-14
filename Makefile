@@ -11,7 +11,7 @@ CLASSES   = $(SOURCES:$(SRC_DIR)/%.java=$(BIN_DIR)/%.class)
 
 # Point d'entrée (ex: com.example.Main ou simplement Main)
 MAIN      = Main
-TESTS     = TasTests AlgorithmsTests TsplibTests
+TESTS     = Tests.TasTests Tests.AlgorithmsTests Tests.TsplibTests
 # ── Cibles ───────────────────────────────────────────────────────────────────
 .PHONY: all run clean help
 
