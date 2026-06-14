@@ -35,7 +35,7 @@ public class TsplibTests {
 
     /**
      * Charge le graphe, lance les 3 algorithmes, affiche les résultats
-     * détaillés puis la comparaison finale.
+     * détaillés, le temps d'exécution de chacun, puis la comparaison finale.
      */
     private static void testerCas(String cheminFichier, int pourcentage, String depart, String arrivee) {
         affichageTitre("Instance : " + cheminFichier + " | p = " + pourcentage + "% | " + depart + " -> " + arrivee);
@@ -49,14 +49,23 @@ public class TsplibTests {
         Map<String, Integer> distancesFinales = new LinkedHashMap<>();
 
         try {
+            long debutDijkstra = System.nanoTime();
             HashMap<String, HashMap<?, ?>> resDijkstra = Algorithms.Dijkstra(graphe, depart, arrivee);
+            long finDijkstra = System.nanoTime();
             executerEtAfficher("Dijkstra", resDijkstra, graphe, depart, arrivee, distancesFinales);
+            afficherTempsExecution("Dijkstra", finDijkstra - debutDijkstra);
 
+            long debutAStar = System.nanoTime();
             HashMap<String, HashMap<?, ?>> resAStar = Algorithms.AEtoile(graphe, depart, arrivee);
+            long finAStar = System.nanoTime();
             executerEtAfficher("A*", resAStar, graphe, depart, arrivee, distancesFinales);
+            afficherTempsExecution("A*", finAStar - debutAStar);
 
+            long debutBidir = System.nanoTime();
             HashMap<String, HashMap<?, ?>> resBidir = Algorithms.Bidirectionnel(graphe, depart, arrivee);
+            long finBidir = System.nanoTime();
             executerEtAfficher("Bidirectionnel", resBidir, graphe, depart, arrivee, distancesFinales);
+            afficherTempsExecution("Bidirectionnel", finBidir - debutBidir);
 
         } catch (Exception e) {
             System.out.println("ECHEC : exception levée pendant l'exécution des algorithmes : " + e);
@@ -88,6 +97,14 @@ public class TsplibTests {
             System.out.println("ECHEC : les algorithmes ne renvoient pas tous la même distance.");
         }
         System.out.println();
+    }
+
+    /**
+     * Affiche le temps d'exécution d'un algorithme, en nanosecondes et en millisecondes.
+     */
+    private static void afficherTempsExecution(String nomAlgo, long dureeNano) {
+        double dureeMs = dureeNano / 1_000_000.0;
+        System.out.println("Temps d'exécution " + nomAlgo + " : " + dureeNano + " ns (" + String.format("%.3f", dureeMs) + " ms)");
     }
 
     /**
