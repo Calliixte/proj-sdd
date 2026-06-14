@@ -11,7 +11,7 @@ CLASSES   = $(SOURCES:$(SRC_DIR)/%.java=$(BIN_DIR)/%.class)
 
 # Point d'entrée (ex: com.example.Main ou simplement Main)
 MAIN      = Main
-
+TESTS     = TasTests AlgorithmsTests TsplibTests
 # ── Cibles ───────────────────────────────────────────────────────────────────
 .PHONY: all run clean help
 
@@ -31,6 +31,13 @@ $(BIN_DIR):
 run: all
 	$(JVM) -cp $(BIN_DIR) $(MAIN)
 
+tests: all
+	@for t in $(TESTS); do \
+		echo "=== Exécution de $$t ==="; \
+		$(JVM) -cp $(BIN_DIR) $$t; \
+		echo ""; \
+	done
+	
 ## Supprime les fichiers compilés
 clean:
 	rm -rf $(BIN_DIR)
@@ -42,5 +49,6 @@ help:
 	@echo "Cibles disponibles :"
 	@echo "  make        – compile les sources"
 	@echo "  make run    – compile puis lance $(MAIN)"
+	@echo "  make tests    – compile puis lance $(TESTS)"
 	@echo "  make clean  – supprime le dossier bin"
 	@echo ""
