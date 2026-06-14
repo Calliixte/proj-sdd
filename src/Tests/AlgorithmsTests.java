@@ -1,4 +1,8 @@
+package Tests;
 import java.util.*;
+
+import Algorithms.Algorithms;
+import Entity.GrapheTSPLIB;
 
 /**
  * Pour chaque cas de test, on construit un GrapheTSPLIB (avec

@@ -1,4 +1,9 @@
+package Algorithms;
 import java.util.*;
+
+import Entity.Graphe;
+import Entity.GrapheTSPLIB;
+import Entity.Tas;
 
 public class Algorithms {
     /**
@@ -99,21 +104,6 @@ public class Algorithms {
     }
 
     /**
-     * 
-     * Calcule la valeur de h pour un graphe TSPLIB donné
-     * @param g graphe choisi
-     * @param x sommet
-     * @param destination 2eme sommet, dans le cadre de l'algo suivant, la destination
-     * @return valeur 
-     */
-    public static double h(GrapheTSPLIB g,String x, String destination) throws Exception{
-        Double res = g.getDistanceSommets(x, destination);
-        if (res == Double.MAX_VALUE){
-            throw new Exception("Tentative de calcul de distance sur des sommets sans coordonnées ! Sommets concernés : " + x + ", "+destination+".");
-        }
-        return res;
-    }
-    /**
      * Implementation java de l'algorithme A*
      * La fonction nommée h(x) sera implémentée de maniere fixe dans ce fichier, dans le cadre d'une application plus complete, la signature de la fonction serait modifiée pour passer la fonction h en parametre
      * 
@@ -160,7 +150,7 @@ public class Algorithms {
         //le tas utilise des entiers ici le resultat sera un double, on supposera que en cas d'arrondi égal le calcul n'aurait pas été impacté
         //on peut envisager une implantation de tas paramétrable pour le type de donnée passé
         pi.put(depart, 0);
-        int h_depart = (int) Math.floor(h(g, depart, arrivee));
+        int h_depart = (int) Math.floor(Utilitaires.h(g, depart, arrivee));
         f.ajouter(depart, h_depart);
         
         String s = depart; //sommet
@@ -195,7 +185,7 @@ public class Algorithms {
                     T.put(voisin_actuel, s);
                     int h_value;
                     try{
-                        h_value = (int) Math.floor(h(g,voisin_actuel,arrivee));
+                        h_value = (int) Math.floor(Utilitaires.h(g,voisin_actuel,arrivee));
                     }catch(Exception e){
                         throw new Exception("Erreur depuis l'algorithme A* :" + e.getMessage());
                     }

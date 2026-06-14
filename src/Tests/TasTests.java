@@ -1,4 +1,7 @@
+package Tests;
 import java.util.*;
+
+import Entity.Tas;
 
 /**
  * Tests "console" (pas de JUnit) pour la classe Tas (tas binaire min).
