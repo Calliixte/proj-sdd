@@ -206,7 +206,6 @@ public class AlgorithmsTests {
      * distances finales entre elles et avec distanceAttendue (si >= 0).
      * distanceAttendue == -1 signifie "pas de vérification de valeur précise".
      */
-    @SuppressWarnings("unchecked")
     private static void executerEtComparer(GrapheTSPLIB g, String depart, String arrivee, int distanceAttendue) {
         Map<String, Integer> distancesFinales = new LinkedHashMap<>();
 
@@ -267,7 +266,6 @@ public class AlgorithmsTests {
      * chemin reconstruit cohérent (commence par depart, termine par arrivee,
      * coût recalculé == pi[arrivee]). Enregistre la distance si tout est valide.
      */
-    @SuppressWarnings("unchecked")
     private static void executerEtAfficher(String nomAlgo,
                                             HashMap<String, HashMap<?, ?>> res,
                                             GrapheTSPLIB g,

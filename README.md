@@ -9,8 +9,6 @@ make run
 ### Tests
 make tests
 
-## Remarques
-Pas de Junit pour les tests pour rendre le projet plus accessible a lancer
 
 ## Sources
 

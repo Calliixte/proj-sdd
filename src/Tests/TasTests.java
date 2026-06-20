@@ -4,7 +4,7 @@ import java.util.*;
 import Entities.Tas;
 
 /**
- * Tests "console" (pas de JUnit) pour la classe Tas (tas binaire min).
+ * Tests pour la classe Tas (tas binaire min).
  *
  * On vérifie :
  * - estVide sur un tas vide
