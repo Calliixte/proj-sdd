@@ -287,6 +287,11 @@ public class AlgorithmsTests {
             return;
         }
 
+        HashMap<String, Integer> compteur = (HashMap<String, Integer>) res.get("compteur");
+        if (compteur != null) {
+            System.out.println("Sommets parcourus  : " + compteur.get("valeur"));
+        }
+
         Integer distFinale = pi.get(arrivee);
         if (distFinale == null || distFinale == Integer.MAX_VALUE) {
             System.out.println("Chemin " + depart + " -> " + arrivee + " : INATTEIGNABLE");

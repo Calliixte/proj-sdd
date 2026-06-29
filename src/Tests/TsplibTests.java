@@ -135,6 +135,11 @@ public class TsplibTests {
             System.out.println("Résultat invalide : pi ou T est null.");
             return;
         }
+        
+        HashMap<String, Integer> compteur = (HashMap<String, Integer>) res.get("compteur");
+        if (compteur != null) {
+            System.out.println("Sommets parcourus  : " + compteur.get("valeur"));
+        }
 
         Integer distFinale = pi.get(arrivee);
         if (distFinale == null || distFinale == Integer.MAX_VALUE) {
@@ -171,6 +176,8 @@ public class TsplibTests {
         // Vérification du coût recalculé
         int coutChemin = calculerCoutChemin(graphe, chemin);
         System.out.println("Chemin optimal     : " + String.join(" -> ", chemin) + "  (coût annoncé : " + distFinale + ", coût recalculé : " + coutChemin + ")");
+
+
 
         if (coutChemin != distFinale) {
             System.out.println("ATTENTION : le coût recalculé ne correspond pas à pi[" + arrivee + "].");

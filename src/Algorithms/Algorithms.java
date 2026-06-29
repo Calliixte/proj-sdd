@@ -37,6 +37,7 @@ public class Algorithms {
         //hashset pour avoir une complexité meilleure qu'avec une arraylist
         HashSet<String> sommets_traites = new HashSet<>();
         ArrayList<String> sommets_graphe = g.getSommets();
+        int nbSommetsVisites = 0; //Compteur du nombre de sommets parcourus
 
         //si le sommet de depart ou le sommet d'arrivée n'est pas dans le graphe, on sort du programme
         if(!sommets_graphe.contains(depart) || !sommets_graphe.contains(arrivee)){
@@ -69,6 +70,7 @@ public class Algorithms {
             }
 
             sommets_traites.add(sommet);
+            nbSommetsVisites = nbSommetsVisites + 1; //quand on marque un sommet comme traité, on le compte comme visité
 
             ArrayList<String> voisins = g.getVoisins(sommet);
             for(String voisin_actuel : voisins){
@@ -100,6 +102,7 @@ public class Algorithms {
         HashMap<String, HashMap<?,?>> return_value = new HashMap<>();
         return_value.put("pi",pi);
         return_value.put("T",T);
+        return_value.put("compteur", new HashMap<>(Map.of("valeur", nbSommetsVisites)));
         return return_value;
     }
 
@@ -131,6 +134,7 @@ public class Algorithms {
         //hashset pour avoir une complexité meilleure qu'avec une arraylist
         HashSet<String> sommets_traites = new HashSet<>();
         ArrayList<String> sommets_graphe = g.getSommets();
+        int nbSommetsVisites = 0; //Compteur du nombre de sommets parcourus
 
         //si le sommet de depart ou le sommet d'arrivée n'est pas dans le graphe, on sort du programme
         if(!sommets_graphe.contains(depart) || !sommets_graphe.contains(arrivee)){
@@ -159,6 +163,8 @@ public class Algorithms {
 
             sommets_traites.add(s);
             //si le sommet est marqué on va au suivant
+            nbSommetsVisites = nbSommetsVisites + 1; //quand on marque un sommet comme traité, on le compte comme visité
+
 
 
             ArrayList<String> voisins = g.getVoisins(s);
@@ -216,6 +222,7 @@ public class Algorithms {
         HashMap<String, HashMap<?,?>> return_value = new HashMap<>();
         return_value.put("pi",pi);
         return_value.put("T",T);
+        return_value.put("compteur", new HashMap<>(Map.of("valeur", nbSommetsVisites)));
         return return_value;
     }
 
@@ -260,6 +267,9 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
     HashMap<String, String> Tav = new HashMap<>();
     HashMap<String, String> Tar = new HashMap<>();
 
+    int nbSommetsVisites_av = 0;
+    int nbSommetsVisites_ar = 0;
+
     for (String sommet : sommets_graphe) {
         piav.put(sommet, Integer.MAX_VALUE);
         piar.put(sommet, Integer.MAX_VALUE);
@@ -300,6 +310,7 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
             }
 
             traites_av.add(s_av);
+            nbSommetsVisites_av = nbSommetsVisites_av + 1;
 
             ArrayList<String> voisins_av = g.getVoisins(s_av);
             for (String voisin : voisins_av) {
@@ -351,6 +362,7 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
         }
 
         traites_ar.add(s_ar);
+        nbSommetsVisites_ar = nbSommetsVisites_ar + 1;
 
         ArrayList<String> voisins_ar = g.getVoisins(s_ar);
         for (String voisin : voisins_ar) {
@@ -408,6 +420,7 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
     HashMap<String, HashMap<?, ?>> return_value = new HashMap<>();
     return_value.put("pi", piav);
     return_value.put("T", T);
+    return_value.put("compteur", new HashMap<>(Map.of("valeur", nbSommetsVisites_av + nbSommetsVisites_ar)));
     return return_value;
 }
 
