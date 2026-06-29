@@ -226,118 +226,170 @@ public class Algorithms {
         return return_value;
     }
 
-/**
- * Implementation de l'algorithme bidirectionnel en java qui "en gros" lance deux dijkstra, un au départ normal, et un depuis l'arrivée, sur le graphe inverse.
- * Nous travaillons avec des graphes non orientés donc le graphe inverse est le meme que 
- * 
- *  Au lieu d'avoir un vecteur pi qui fait les distances, on en crée 2 (pi avant piav, et pi arriere piar), puisque on a 2 recherches simultanées
- * quand on fait une recherche avant, on arrive sur une arete quelconque, on connait nécéssairement la distance début <-> extremité 1 de l'arete 
- * et la distance extermité 2 de l'arete <-> fin.
- * 
- * Si la somme de ces deux distances + le poids de l'arrete extremité 1 <-> extermité 2  est inférieure à la distance actuelle pour piav de p alors on le met à jour
- * 
- * ce calcul fonctionne meme a la premiere itération puisque de base piav(v) vaut maxint
- * 
- * le meme raisonnement peut être établi en prenant le point de vue d'une recherche arrière, ce qui rend ce algorithme réellement efficace. Sans cela il nécéssiterait une recherche arrière complete avant la recherche avant, perdant son efficacité. 
- *
- * @param g Graphe dans lequel on effectuera la recherche
- * @param depart sommet de départ
- * @param arrivee sommet d'arrivée
- * @return une hashmap avec 2 hashmap : pi (distances) et T (predecesseurs)
- * @throws Exception
- */
-public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depart, String arrivee) throws Exception {
+    /**
+     * Implementation de l'algorithme bidirectionnel en java qui "en gros" lance deux dijkstra, un au départ normal, et un depuis l'arrivée, sur le graphe inverse.
+     * Nous travaillons avec des graphes non orientés donc le graphe inverse est le meme que 
+     * 
+     *  Au lieu d'avoir un vecteur pi qui fait les distances, on en crée 2 (pi avant piav, et pi arriere piar), puisque on a 2 recherches simultanées
+     * quand on fait une recherche avant, on arrive sur une arete quelconque, on connait nécéssairement la distance début <-> extremité 1 de l'arete 
+     * et la distance extermité 2 de l'arete <-> fin.
+     * 
+     * Si la somme de ces deux distances + le poids de l'arrete extremité 1 <-> extermité 2  est inférieure à la distance actuelle pour piav de p alors on le met à jour
+     * 
+     * ce calcul fonctionne meme a la premiere itération puisque de base piav(v) vaut maxint
+     * 
+     * le meme raisonnement peut être établi en prenant le point de vue d'une recherche arrière, ce qui rend ce algorithme réellement efficace. Sans cela il nécéssiterait une recherche arrière complete avant la recherche avant, perdant son efficacité. 
+     *
+     * @param g Graphe dans lequel on effectuera la recherche
+     * @param depart sommet de départ
+     * @param arrivee sommet d'arrivée
+     * @return une hashmap avec 2 hashmap : pi (distances) et T (predecesseurs)
+     * @throws Exception
+     */
+    public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depart, String arrivee) throws Exception {
 
-    ArrayList<String> sommets_graphe = g.getSommets();
+        ArrayList<String> sommets_graphe = g.getSommets();
 
-    // si le sommet de depart ou le sommet d'arrivée n'est pas dans le graphe, on sort du programme
-    if (!sommets_graphe.contains(depart) || !sommets_graphe.contains(arrivee)) {
-        return null;
-    }
+        // si le sommet de depart ou le sommet d'arrivée n'est pas dans le graphe, on sort du programme
+        if (!sommets_graphe.contains(depart) || !sommets_graphe.contains(arrivee)) {
+            return null;
+        }
 
-    // sommets traités dans chaque direction
-    HashSet<String> traites_av = new HashSet<>();
-    HashSet<String> traites_ar = new HashSet<>();
+        // sommets traités dans chaque direction
+        HashSet<String> traites_av = new HashSet<>();
+        HashSet<String> traites_ar = new HashSet<>();
 
-    // vecteurs de distances avant et arrière
-    HashMap<String, Integer> piav = new HashMap<>();
-    HashMap<String, Integer> piar = new HashMap<>();
+        // vecteurs de distances avant et arrière
+        HashMap<String, Integer> piav = new HashMap<>();
+        HashMap<String, Integer> piar = new HashMap<>();
 
-    // vecteurs de prédécesseurs avant et arrière
-    HashMap<String, String> Tav = new HashMap<>();
-    HashMap<String, String> Tar = new HashMap<>();
+        // vecteurs de prédécesseurs avant et arrière
+        HashMap<String, String> Tav = new HashMap<>();
+        HashMap<String, String> Tar = new HashMap<>();
 
-    int nbSommetsVisites_av = 0;
-    int nbSommetsVisites_ar = 0;
+        int nbSommetsVisites_av = 0;
+        int nbSommetsVisites_ar = 0;
 
-    for (String sommet : sommets_graphe) {
-        piav.put(sommet, Integer.MAX_VALUE);
-        piar.put(sommet, Integer.MAX_VALUE);
-        Tav.put(sommet, null);
-        Tar.put(sommet, null);
-    }
+        for (String sommet : sommets_graphe) {
+            piav.put(sommet, Integer.MAX_VALUE);
+            piar.put(sommet, Integer.MAX_VALUE);
+            Tav.put(sommet, null);
+            Tar.put(sommet, null);
+        }
 
-    piav.put(depart, 0);
-    piar.put(arrivee, 0);
+        piav.put(depart, 0);
+        piar.put(arrivee, 0);
 
-    // tas pour la recherche avant et arrière
-    Tas Sav = new Tas();
-    Tas Sar = new Tas();
+        // tas pour la recherche avant et arrière
+        Tas Sav = new Tas();
+        Tas Sar = new Tas();
 
-    Sav.ajouter(depart, 0);
-    Sar.ajouter(arrivee, 0);
+        Sav.ajouter(depart, 0);
+        Sar.ajouter(arrivee, 0);
 
-    // meilleure distance connue entre depart et arrivee
-    int meilleure_distance = Integer.MAX_VALUE;
+        // meilleure distance connue entre depart et arrivee
+        int meilleure_distance = Integer.MAX_VALUE;
 
-    // sommet sur lequel les deux fronts se sont rejoints pour obtenir meilleure_distance
-    // on en a besoin pour reconstruire le chemin complet lors de la fusion de Tav et Tar
-    String sommet_jonction = null;
+        // sommet sur lequel les deux fronts se sont rejoints pour obtenir meilleure_distance
+        // on en a besoin pour reconstruire le chemin complet lors de la fusion de Tav et Tar
+        String sommet_jonction = null;
 
-    while (!Sav.estVide() && !Sar.estVide()) {
+        while (!Sav.estVide() && !Sar.estVide()) {
 
-        // --- recherche avant ---
-        Map.Entry<String, Integer> result_av = Sav.retirer();
-        String s_av = result_av.getKey();
+            // --- recherche avant ---
+            Map.Entry<String, Integer> result_av = Sav.retirer();
+            String s_av = result_av.getKey();
 
-        // si ce sommet a déjà été traité dans la recherche avant, on passe
-        if (traites_av.contains(s_av)) {
-            // on continue quand même la recherche arrière ci-dessous
-        } else {
-            // condition d'arrêt : s_av a déjà été examiné dans la recherche arrière
-            if (traites_ar.contains(s_av)) {
+            // si ce sommet a déjà été traité dans la recherche avant, on passe
+            if (traites_av.contains(s_av)) {
+                // on continue quand même la recherche arrière ci-dessous
+            } else {
+                // condition d'arrêt : s_av a déjà été examiné dans la recherche arrière
+                if (traites_ar.contains(s_av)) {
+                    break;
+                }
+
+                traites_av.add(s_av);
+                nbSommetsVisites_av = nbSommetsVisites_av + 1;
+
+                ArrayList<String> voisins_av = g.getVoisins(s_av);
+                for (String voisin : voisins_av) {
+                    if (traites_av.contains(voisin)) {
+                        continue;
+                    }
+
+                    Integer distance_s_v = g.getDistance(s_av, voisin);
+
+                    if (distance_s_v == null) {
+                        System.err.println("[Algorithms.java][Bidirectionnel] Probleme lors de la verification de distance avec les voisins (avant)");
+                        continue;
+                    }
+
+                    // mise à jour de piav via relaxation classique
+                    if (piav.get(s_av) != Integer.MAX_VALUE) {
+                        int nouvelle_distance = piav.get(s_av) + distance_s_v;
+
+                        if (nouvelle_distance < piav.get(voisin)) {
+                            piav.put(voisin, nouvelle_distance);
+                            Tav.put(voisin, s_av);
+                            Sav.ajouter(voisin, nouvelle_distance);
+                        }
+
+                        // si le voisin a déjà été visité en arrière, on peut potentiellement mettre à jour la meilleure distance
+                        if (piar.get(voisin) != Integer.MAX_VALUE) {
+                            int distance_totale = nouvelle_distance + piar.get(voisin);
+                            if (distance_totale < meilleure_distance) {
+                                meilleure_distance = distance_totale;
+                                piav.put(arrivee, meilleure_distance);
+                                sommet_jonction = voisin;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // recherche arrière 
+            Map.Entry<String, Integer> result_ar = Sar.retirer();
+            String s_ar = result_ar.getKey();
+
+            if (traites_ar.contains(s_ar)) {
+                continue;
+            }
+
+            // si s_ar a déjà été examiné dans la recherche avant -> pas besoin de le retraiter on sort
+            if (traites_av.contains(s_ar)) {
                 break;
             }
 
-            traites_av.add(s_av);
-            nbSommetsVisites_av = nbSommetsVisites_av + 1;
+            traites_ar.add(s_ar);
+            nbSommetsVisites_ar = nbSommetsVisites_ar + 1;
 
-            ArrayList<String> voisins_av = g.getVoisins(s_av);
-            for (String voisin : voisins_av) {
-                if (traites_av.contains(voisin)) {
+            ArrayList<String> voisins_ar = g.getVoisins(s_ar);
+            for (String voisin : voisins_ar) {
+                if (traites_ar.contains(voisin)) {
                     continue;
                 }
 
-                Integer distance_s_v = g.getDistance(s_av, voisin);
+                Integer distance_s_v = g.getDistance(s_ar, voisin);
 
                 if (distance_s_v == null) {
-                    System.err.println("[Algorithms.java][Bidirectionnel] Probleme lors de la verification de distance avec les voisins (avant)");
+                    System.err.println("[Algorithms.java][Bidirectionnel] Probleme lors de la verification de distance avec les voisins (arriere)");
                     continue;
                 }
 
-                // mise à jour de piav via relaxation classique
-                if (piav.get(s_av) != Integer.MAX_VALUE) {
-                    int nouvelle_distance = piav.get(s_av) + distance_s_v;
+                // mise à jour de piar
+                if (piar.get(s_ar) != Integer.MAX_VALUE) {
+                    int nouvelle_distance = piar.get(s_ar) + distance_s_v;
 
-                    if (nouvelle_distance < piav.get(voisin)) {
-                        piav.put(voisin, nouvelle_distance);
-                        Tav.put(voisin, s_av);
-                        Sav.ajouter(voisin, nouvelle_distance);
+                    if (nouvelle_distance < piar.get(voisin)) {
+                        piar.put(voisin, nouvelle_distance);
+                        Tar.put(voisin, s_ar);
+                        Sar.ajouter(voisin, nouvelle_distance);
                     }
 
-                    // si le voisin a déjà été visité en arrière, on peut potentiellement mettre à jour la meilleure distance
-                    if (piar.get(voisin) != Integer.MAX_VALUE) {
-                        int distance_totale = nouvelle_distance + piar.get(voisin);
+                    // si le voisin a déjà été visité en avant, on peut potentiellement mettre à jour la meilleure distance
+                    if (piav.get(voisin) != Integer.MAX_VALUE) {
+                        int distance_totale = piav.get(voisin) + nouvelle_distance;
                         if (distance_totale < meilleure_distance) {
                             meilleure_distance = distance_totale;
                             piav.put(arrivee, meilleure_distance);
@@ -348,80 +400,28 @@ public static HashMap<String,HashMap<?,?>> Bidirectionnel(Graphe g, String depar
             }
         }
 
-        // recherche arrière 
-        Map.Entry<String, Integer> result_ar = Sar.retirer();
-        String s_ar = result_ar.getKey();
+        // reconstruction du vecteur T complet en fusionnant Tav et Tar
+        // Tav nous donne directement le chemin départ -> sommet_jonction
+        // Tar donne les prédécesseurs depuis l'arrivée, donc Tar[x] = y signifie y -> x dans le sens arrière,
+        // soit x -> y dans le sens avant : on repart de sommet_jonction et on remonte Tar jusqu'à arrivée
+        // en inversant chaque lien pour les intégrer correctement dans T
+        HashMap<String, String> T = new HashMap<>(Tav);
 
-        if (traites_ar.contains(s_ar)) {
-            continue;
-        }
-
-        // si s_ar a déjà été examiné dans la recherche avant -> pas besoin de le retraiter on sort
-        if (traites_av.contains(s_ar)) {
-            break;
-        }
-
-        traites_ar.add(s_ar);
-        nbSommetsVisites_ar = nbSommetsVisites_ar + 1;
-
-        ArrayList<String> voisins_ar = g.getVoisins(s_ar);
-        for (String voisin : voisins_ar) {
-            if (traites_ar.contains(voisin)) {
-                continue;
-            }
-
-            Integer distance_s_v = g.getDistance(s_ar, voisin);
-
-            if (distance_s_v == null) {
-                System.err.println("[Algorithms.java][Bidirectionnel] Probleme lors de la verification de distance avec les voisins (arriere)");
-                continue;
-            }
-
-            // mise à jour de piar
-            if (piar.get(s_ar) != Integer.MAX_VALUE) {
-                int nouvelle_distance = piar.get(s_ar) + distance_s_v;
-
-                if (nouvelle_distance < piar.get(voisin)) {
-                    piar.put(voisin, nouvelle_distance);
-                    Tar.put(voisin, s_ar);
-                    Sar.ajouter(voisin, nouvelle_distance);
-                }
-
-                // si le voisin a déjà été visité en avant, on peut potentiellement mettre à jour la meilleure distance
-                if (piav.get(voisin) != Integer.MAX_VALUE) {
-                    int distance_totale = piav.get(voisin) + nouvelle_distance;
-                    if (distance_totale < meilleure_distance) {
-                        meilleure_distance = distance_totale;
-                        piav.put(arrivee, meilleure_distance);
-                        sommet_jonction = voisin;
-                    }
-                }
+        if (sommet_jonction != null) {
+            String courant = sommet_jonction;
+            while (courant != null && !courant.equals(arrivee)) {
+                String suivant = Tar.get(courant);
+                if (suivant == null) break;
+                T.put(suivant, courant);
+                courant = suivant;
             }
         }
+
+        HashMap<String, HashMap<?, ?>> return_value = new HashMap<>();
+        return_value.put("pi", piav);
+        return_value.put("T", T);
+        return_value.put("compteur", new HashMap<>(Map.of("valeur", nbSommetsVisites_av + nbSommetsVisites_ar)));
+        return return_value;
     }
-
-    // reconstruction du vecteur T complet en fusionnant Tav et Tar
-    // Tav nous donne directement le chemin départ -> sommet_jonction
-    // Tar donne les prédécesseurs depuis l'arrivée, donc Tar[x] = y signifie y -> x dans le sens arrière,
-    // soit x -> y dans le sens avant : on repart de sommet_jonction et on remonte Tar jusqu'à arrivée
-    // en inversant chaque lien pour les intégrer correctement dans T
-    HashMap<String, String> T = new HashMap<>(Tav);
-
-    if (sommet_jonction != null) {
-        String courant = sommet_jonction;
-        while (courant != null && !courant.equals(arrivee)) {
-            String suivant = Tar.get(courant);
-            if (suivant == null) break;
-            T.put(suivant, courant);
-            courant = suivant;
-        }
-    }
-
-    HashMap<String, HashMap<?, ?>> return_value = new HashMap<>();
-    return_value.put("pi", piav);
-    return_value.put("T", T);
-    return_value.put("compteur", new HashMap<>(Map.of("valeur", nbSommetsVisites_av + nbSommetsVisites_ar)));
-    return return_value;
-}
 
 }
